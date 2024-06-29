@@ -11,11 +11,40 @@
             color: #fff;
             text-align: center;
             padding: 50px;
+            overflow: hidden;
+        }
+        .heart-emoji {
+            font-size: 100px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 1;
+            animation: heartPop 2s ease-in-out;
+        }
+        @keyframes heartPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1.5);
+                opacity: 0;
+            }
         }
         .letter-container {
             display: none;
             opacity: 0;
             animation: fadeIn 3s forwards;
+            margin-top: 100px;
+            border: 2px solid #fff;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
         }
         @keyframes fadeIn {
             to {
@@ -25,6 +54,7 @@
     </style>
 </head>
 <body>
+    <div class="heart-emoji">❤️</div>
     <div id="from" style="display:none;"></div>
     <div class="letter-container">
         <div id="letter"></div>
@@ -42,11 +72,12 @@
                     document.getElementById('letter').innerHTML = letterData.letter;
 
                     setTimeout(function() {
+                        document.querySelector('.heart-emoji').style.display = 'none';
                         document.getElementById('from').style.display = 'block';
                         setTimeout(function() {
                             document.querySelector('.letter-container').style.display = 'block';
                         }, 1000);
-                    }, 1000);
+                    }, 2000);
                 } else {
                     document.getElementById('letter').textContent = 'Invalid letter link.';
                 }
