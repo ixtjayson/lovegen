@@ -56,10 +56,13 @@
             const subject = document.getElementById('subject').value;
             const message = document.getElementById('message').value;
             const username = document.getElementById('username').value;
-            
+
             const letter = `Hey ${name},<br><br>${message}<br><br>Your lover,<br>${username}`;
-            const encodedLetter = encodeURIComponent(letter);
-            const link = `${window.location.href.split('?')[0]}letter.html?letter=${encodedLetter}&name=${encodeURIComponent(username)}`;
+            const letterID = 'letter-' + Math.random().toString(36).substr(2, 9);
+            
+            localStorage.setItem(letterID, JSON.stringify({ name, subject, message, username, letter }));
+            
+            const link = `${window.location.href.split('?')[0]}letter.html?id=${letterID}`;
             
             document.getElementById('letterLink').href = link;
             document.getElementById('letterLink').textContent = link;
