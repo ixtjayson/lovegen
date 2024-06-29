@@ -3,104 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Love Letter</title>
+    <title>Create a Love Letter</title>
     <style>
         body {
             background: linear-gradient(to right, #ff7e5f, #feb47b);
             font-family: Arial, sans-serif;
-            color: #fff;
             text-align: center;
+            color: #fff;
             padding: 50px;
-            overflow: hidden;
         }
-        .heart {
-            width: 100px;
-            height: 100px;
-            background: pink;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(45deg);
-            animation: heartbeat 2s ease-in-out;
+        form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
         }
-        .heart:before,
-        .heart:after {
-            content: "";
-            width: 100px;
-            height: 100px;
-            background: pink;
-            position: absolute;
-            border-radius: 50%;
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
         }
-        .heart:before {
-            top: -50px;
-            left: 0;
-        }
-        .heart:after {
-            top: 0;
-            left: -50px;
-        }
-        @keyframes heartbeat {
-            0% {
-                transform: translate(-50%, -50%) rotate(45deg) scale(1);
-            }
-            25% {
-                transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
-            }
-            50% {
-                transform: translate(-50%, -50%) rotate(45deg) scale(1.4);
-            }
-            75% {
-                transform: translate(-50%, -50%) rotate(45deg) scale(1.2);
-            }
-            100% {
-                transform: translate(-50%, -50%) rotate(45deg) scale(1);
-                opacity: 0;
-            }
-        }
-        .letter-container {
-            display: none;
-            opacity: 0;
-            animation: fadeIn 3s forwards;
-        }
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+        button {
+            padding: 10px 20px;
+            background: #ff7e5f;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <div class="heart"></div>
-    <div id="from" style="display:none;"></div>
-    <div class="letter-container">
-        <div id="letter"></div>
+    <h1>Create a Beautiful Love Letter</h1>
+    <form id="letterForm">
+        <input type="text" id="name" placeholder="Your Crush's Name" required>
+        <input type="text" id="subject" placeholder="Subject" required>
+        <textarea id="message" rows="10" placeholder="Type your message here..." required></textarea>
+        <input type="text" id="username" placeholder="Your Name" required>
+        <button type="submit">Generate Letter</button>
+    </form>
+    <div id="linkContainer" style="display:none;">
+        <p>Your letter has been created! Share this link with your crush:</p>
+        <a id="letterLink" href="#" target="_blank"></a>
     </div>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const params = new URLSearchParams(window.location.search);
-            const letterID = params.get('id');
+        function generateID() {
+            return 'letter-' + Math.random().toString(36).substr(2, 9);
+        }
 
-            if (letterID) {
-                const letterData = JSON.parse(localStorage.getItem(letterID));
+        document.getElementById('letterForm').addEventListener('submit', function(event) {
+            event.preventDefault();
 
-                if (letterData) {
-                    document.getElementById('from').textContent = `From ${letterData.username}`;
-                    document.getElementById('letter').innerHTML = letterData.letter;
+            const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            const username = document.getElementById('username').value;
 
-                    setTimeout(function() {
-                        document.querySelector('.heart').style.display = 'none';
-                        document.getElementById('from').style.display = 'block';
-                        setTimeout(function() {
-                            document.querySelector('.letter-container').style.display = 'block';
-                        }, 1000);
-                    }, 2000);
-                } else {
-                    document.getElementById('letter').textContent = 'Invalid letter link.';
-                }
-            } else {
-                document.getElementById('letter').textContent = 'Invalid letter link.';
-            }
+            const letter = `Hey ${name},<br><br>${message}<br><br>Your lover,<br>${username}`;
+            const letterID = generateID();
+
+            localStorage.setItem(letterID, JSON.stringify({ name, subject, message, username, letter }));
+
+            const link = `letter.html?id=${letterID}`;
+
+            document.getElementById('letterLink').href = link;
+            document.getElementById('letterLink').textContent = link;
+            document.getElementById('linkContainer').style.display = 'block';
         });
     </script>
 </body>
