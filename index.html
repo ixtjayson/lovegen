@@ -37,12 +37,34 @@
 </head>
 <body>
     <h1>Create a Beautiful Love Letter</h1>
-    <form action="generate.php" method="POST">
-        <input type="text" name="name" placeholder="Your Crush's Name" required>
-        <input type="text" name="subject" placeholder="Subject" required>
-        <textarea name="message" rows="10" placeholder="Type your message here..." required></textarea>
-        <input type="text" name="username" placeholder="Your Name" required>
+    <form id="letterForm">
+        <input type="text" id="name" placeholder="Your Crush's Name" required>
+        <input type="text" id="subject" placeholder="Subject" required>
+        <textarea id="message" rows="10" placeholder="Type your message here..." required></textarea>
+        <input type="text" id="username" placeholder="Your Name" required>
         <button type="submit">Generate Letter</button>
     </form>
+    <div id="linkContainer" style="display:none;">
+        <p>Your letter has been created! Share this link with your crush:</p>
+        <a id="letterLink" href="#" target="_blank"></a>
+    </div>
+    <script>
+        document.getElementById('letterForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+            const username = document.getElementById('username').value;
+            
+            const letter = `Hey ${name},<br><br>${message}<br><br>Your lover,<br>${username}`;
+            const encodedLetter = encodeURIComponent(letter);
+            const link = `${window.location.href.split('?')[0]}letter.html?letter=${encodedLetter}&name=${encodeURIComponent(username)}`;
+            
+            document.getElementById('letterLink').href = link;
+            document.getElementById('letterLink').textContent = link;
+            document.getElementById('linkContainer').style.display = 'block';
+        });
+    </script>
 </body>
 </html>
