@@ -49,21 +49,25 @@
         <a id="letterLink" href="#" target="_blank"></a>
     </div>
     <script>
+        function generateID() {
+            return 'letter-' + Math.random().toString(36).substr(2, 9);
+        }
+
         document.getElementById('letterForm').addEventListener('submit', function(event) {
             event.preventDefault();
-            
+
             const name = document.getElementById('name').value;
             const subject = document.getElementById('subject').value;
             const message = document.getElementById('message').value;
             const username = document.getElementById('username').value;
 
             const letter = `Hey ${name},<br><br>${message}<br><br>Your lover,<br>${username}`;
-            const letterID = 'letter-' + Math.random().toString(36).substr(2, 9);
-            
+            const letterID = generateID();
+
             localStorage.setItem(letterID, JSON.stringify({ name, subject, message, username, letter }));
-            
+
             const link = `${window.location.href.split('?')[0]}letter.html?id=${letterID}`;
-            
+
             document.getElementById('letterLink').href = link;
             document.getElementById('letterLink').textContent = link;
             document.getElementById('linkContainer').style.display = 'block';
