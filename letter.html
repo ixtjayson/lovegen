@@ -32,19 +32,24 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const params = new URLSearchParams(window.location.search);
-            const letter = params.get('letter');
-            const name = params.get('name');
-
-            if (letter && name) {
-                document.getElementById('from').textContent = `From ${decodeURIComponent(name)}`;
-                document.getElementById('letter').innerHTML = decodeURIComponent(letter);
+            const letterID = params.get('id');
+            
+            if (letterID) {
+                const letterData = JSON.parse(localStorage.getItem(letterID));
                 
-                setTimeout(function() {
-                    document.getElementById('from').style.display = 'block';
+                if (letterData) {
+                    document.getElementById('from').textContent = `From ${letterData.username}`;
+                    document.getElementById('letter').innerHTML = letterData.letter;
+                    
                     setTimeout(function() {
-                        document.querySelector('.letter-container').style.display = 'block';
+                        document.getElementById('from').style.display = 'block';
+                        setTimeout(function() {
+                            document.querySelector('.letter-container').style.display = 'block';
+                        }, 1000);
                     }, 1000);
-                }, 1000);
+                } else {
+                    document.getElementById('letter').textContent = 'Invalid letter link.';
+                }
             } else {
                 document.getElementById('letter').textContent = 'Invalid letter link.';
             }
